@@ -18,11 +18,17 @@ class Snake:
 
     def create_instance(self):
         for position in TURTLE_STARTING_POSITION:
-            new_turtle_instance = Turtle(shape="square")
-            new_turtle_instance.color("white")
-            new_turtle_instance.penup()
-            new_turtle_instance.goto(position)
-            self.turtle_instance_list.append(new_turtle_instance)
+            self.create_snake(position)
+
+    def create_snake(self, position):
+        self.new_turtle_instance = Turtle(shape="square")
+        self.new_turtle_instance.color("white")
+        self.new_turtle_instance.penup()
+        self.new_turtle_instance.goto(position)
+        self.turtle_instance_list.append(self.new_turtle_instance)
+
+    def extend(self):
+        self.create_snake(self.turtle_instance_list[-1].position())
 
     def move(self):
         """
@@ -34,7 +40,6 @@ class Snake:
         """
 
         for instance_num in range(len(self.turtle_instance_list) - 1, 0, -1):
-            print(f"\n\t Index -> {instance_num}")
             new_x = self.turtle_instance_list[instance_num - 1].xcor()
             new_y = self.turtle_instance_list[instance_num - 1].ycor()
             self.turtle_instance_list[instance_num].goto(new_x, new_y)
