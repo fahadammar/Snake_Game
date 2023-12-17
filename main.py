@@ -4,7 +4,6 @@ from food import Food
 from scoreboard import Scoreboard
 import time
 
-game_on_flag = True
 
 screen = Screen()
 
@@ -24,31 +23,38 @@ screen.onkey(snake.down, "Down")
 screen.onkey(snake.right, "Right")
 screen.onkey(snake.left, "Left")
 
-while game_on_flag:
-    screen.update()
-    time.sleep(0.1)
-    snake.move()
+scoreboard.welcome_screen(screen=screen)
 
-    # DETECT COLLISION WITH THE FOOD
-    if snake.head.distance(food) < 15:
-        food.refresh()
-        snake.extend()
-        scoreboard.increase_score()
 
-    # DETECT COLLISION WITH WALL
-    if (
-        snake.head.xcor() > 280
-        or snake.head.xcor() < -280
-        or snake.head.ycor() > 280
-        or snake.head.ycor() < -280
-    ):
-        game_on_flag = False
-        scoreboard.game_over()
+def startGame():
+    game_on_flag = True
+    while game_on_flag:
+        screen.update()
+        time.sleep(0.1)
+        snake.move()
 
-    for snake_seg in snake.turtle_instance_list[1:]:
-        if snake.head.distance(snake_seg) < 10:
+        # DETECT COLLISION WITH THE FOOD
+        if snake.head.distance(food) < 15:
+            food.refresh()
+            snake.extend()
+            scoreboard.increase_score()
+
+        # DETECT COLLISION WITH WALL
+        if (
+            snake.head.xcor() > 280
+            or snake.head.xcor() < -280
+            or snake.head.ycor() > 280
+            or snake.head.ycor() < -280
+        ):
             game_on_flag = False
             scoreboard.game_over()
 
+        for snake_seg in snake.turtle_instance_list[1:]:
+            if snake.head.distance(snake_seg) < 10:
+                game_on_flag = False
+                scoreboard.game_over()
+
+
+screen.ontimer(startGame, 8000)
 
 screen.exitonclick()
